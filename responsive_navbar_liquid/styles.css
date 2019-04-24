@@ -1,0 +1,131 @@
+/* this is just removing the basic styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: sans-serif;
+}
+
+nav {
+  height: 10vh;
+  background: #5b78c7;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  /*this makes it half the page width*/
+  width: 50%;
+  /*this makes it same height as the navbar*/
+  height: 100%;
+  /*spaced around and lined in the center (horizontally) */
+  justify-content: space-around;
+  /*spaced around and lined in the center (vertically) */
+  align-items: center;
+  /*this pushes all the links to the far right
+  (instead of the default of left)*/
+  margin-left: auto;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.main_body {
+  /*10 for the nav and 90 for the main body, making 100vh*/
+  height: 90vh;
+  /* centers everything in this section */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main_body h1 {
+  margin: 25px;
+  font-size: 50px;
+  color: #ae5fce;
+}
+
+/*making it responsive with the @media
+based on a specific screen sizes (so it won't even display
+the hamburger on the larger screens )*/
+@media screen and (max-width: 786px){
+
+  .burgerline{
+    width: 30px;
+    height: 3px;
+    background: white;
+    margin: 5px;
+  }
+  /* adding postion relative to nav, lets the hamburger able to
+  be moved into a specific postion */
+  nav{
+    position: relative;
+  }
+
+  .hamburger{
+    position: absolute;
+    /*makes it clickable*/
+    cursor: pointer;
+    /*this position makes it center on the right side*/
+    right: 10%;
+    top: 50%;
+    transform: translate(-5%, -50%);
+    /* once the navigation bar is open,
+    add the z index so it's still visible*/
+    z-index:4;
+  }
+  .nav-links{
+    position: fixed;
+    background: #5b78c7;
+    /*covering the entire screen*/
+    height: 100vh;
+    width: 100%;
+    /*making these vertical instead of horizontal*/
+    flex-direction: column;
+    /*the actual "fluid" animation path, with a 'mask'*/
+    /* syntax is the size at x value, y value, starting at top left
+    so this is saying it's going to start at the very top
+    (out of frame, hense the -10) and far right */
+    clip-path: circle(100px at 90% -10%);
+    /*since this is newer, you have to add -webkit*/
+    -webkit-clip-path: circle(100px at 90% -10%);
+    /* making the transition smooth */
+    transition: all 1s ease-out;
+    /*ensuring the nav links are not clickable unless the navbar is open*/
+    pointer-events: none;
+  }
+  /*making the navbar responsive */
+  .nav-links.open{
+    clip-path: circle(1000px at 90% -10%);
+    -webkit-clip-path: circle(1000px at 90% -10%);
+    pointer-events: all;
+  }
+  /*for the smaller screens, having the body be vertical (columns)*/
+  .main_body{
+    flex-direction: column;
+  }
+
+  /*adding a short fade for the navigation links to be displayed */
+  .nav-links li {
+    opacity: 0;
+  }
+  .nav-links li:nth-child(1) {
+  transition: all 0.5s ease 0.4s;
+  }
+  .nav-links li:nth-child(2) {
+    transition: all 0.5s ease 0.5s;
+  }
+  .nav-links li:nth-child(3) {
+    transition: all 0.5s ease 0.7s;
+  }
+  li.fade {
+    opacity: 1;
+  }
+}

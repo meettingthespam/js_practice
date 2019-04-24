@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <title>Document</title>
+  </head>
+  <style media="screen">
+    .jumbotron_header {
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    .middleArea {
+      background-image: url("https://cdn.pixabay.com/photo/2013/10/02/23/03/dawn-190055_960_720.jpg");
+      height: 700px;
+      width: 100%;
+    }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+    a:hover {
+      color: black;
+    }
+  </style>
+  <body>
+    <div class="jumbotron mb-2 firstArea">
+      <h1 class="jumbotron_header text-center">Smooth Scrolling JS</h1>
+      <p class="text-center">
+        <a
+          class="btn btn-outline-secondary btn-lg"
+          href="#"
+          role="button"
+          >click to go down</a
+        >
+      </p>
+    </div>
+
+    <div class="containter middleArea"></div>
+
+    <div class="containter divTwo pt-4 mt-4 thirdArea">
+      <h1><a class="thirdArea" href="#">This is your targetPosition</a></h1>
+      <p>
+        Check out .getBoundingClientRect(), it has a lot of information about
+        element location on the page. We're just using top here since we're
+        scrolling down and we're just aiming at the top of the targetPostion
+        (.thirdArea in this case)
+      </p>
+      <p>Also note the use of window.pageYOffset</p>
+      <p>
+        For easing functions, check out
+        <a href="http://www.gizma.com/easing/">gizma</a>.
+      </p>
+      <p>
+        Also check out the
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame"
+          >Mozilla docs on animation</a
+        >
+        with requestAnimationFrame. It makes the transitions smooth because it
+        refreshes at 60fps
+      </p>
+    </div>
+
+    <script>
+      // funciton for page scroll, target -> destination, duration -> time of animation
+      function smoothScroll(target, duration) {
+        var target = document.querySelector(target);
+        // grabbing the top of the target position (since we're scrolling down,
+        // we want just the top of the area we are interested in)
+        var targetPostiton = target.getBoundingClientRect().top;
+        // getting the starting position
+        // window.pageYOffset starts at 0 (top of page) and increases
+        // the further it goes
+        var startPostition = window.pageYOffset;
+        // then we need the distance between the targetPostion and the startPostition
+        var distance = targetPostiton - startPostition;
+        // we next need the start time
+        var startTime = null;
+
+        // keeping track of the time in relation to the requestAnimationFrame
+        // and looping over the ease function with that time stamp in mind
+        function scrollAnimation(currentTime) {
+          if (startTime === null) startTime = currentTime;
+          var timeElapsed = currentTime - startTime;
+          var run = ease(timeElapsed, startPostition, distance, duration);
+          // only want to scroll the y, not the x
+          window.scrollTo(0, run);
+          // making sure to keep it running as long as the animation needs to
+          // keep going
+          if (timeElapsed < duration) requestAnimationFrame(scrollAnimation);
+        }
+
+        // easing function
+        function ease(t, b, c, d) {
+          t /= d / 2;
+          if (t < 1) return (c / 2) * t * t + b;
+          t--;
+          return (-c / 2) * (t * (t - 2) - 1) + b;
+        }
+
+        // this loops over scrollAnimation at 60 fps
+        requestAnimationFrame(scrollAnimation);
+
+        console.log(startPostition);
+      }
+
+      var firstArea = document.querySelector(".firstArea");
+      var thirdArea = document.querySelector(".thirdArea");
+
+      firstArea.addEventListener('click', function() {
+        smoothScroll(".thirdArea", 2000);
+      });
+
+
+      thirdArea.addEventListener('click', function(){
+        smoothScroll(".firstArea", 2000);
+
+      })
+    </script>
+  </body>
+</html>
